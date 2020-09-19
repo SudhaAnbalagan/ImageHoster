@@ -1,8 +1,10 @@
 package ImageHoster.controller;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
+import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,10 @@ public class ImageController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private CommentService commentService;
+
 
     //This method displays all the images in the user home page after successful login
     @RequestMapping("images")
@@ -51,6 +57,8 @@ public class ImageController {
         Image image = imageService.getImage(id);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+        List<Comment> commentList = commentService.getAllComments(image.getId(), image.getTitle());
+        model.addAttribute("comments", commentList);
 
         return "images/image";
     }
@@ -110,6 +118,8 @@ public class ImageController {
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("image", image);
             model.addAttribute("tags", tags);
+            List<Comment> commentList = commentService.getAllComments(image.getId(), image.getTitle());
+            model.addAttribute("comments", commentList);
 
             model.addAttribute("editError",error);
             return "images/image";
@@ -160,7 +170,7 @@ public class ImageController {
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId ,Model model,HttpSession session) {
         Image image = imageService.getImage(imageId);
         User user = (User) session.getAttribute("loggeduser");
-        
+
 
         if(user.getUsername().equals(image.getUser().getUsername())) {
             imageService.deleteImage(imageId);
@@ -172,6 +182,8 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags", tags);
 
+            List<Comment> commentList = commentService.getAllComments(image.getId(), image.getTitle());
+            model.addAttribute("comments", commentList);
 
             model.addAttribute("deleteError",error);
             return "images/image";
