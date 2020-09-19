@@ -48,7 +48,6 @@ public class ImageController {
     @RequestMapping("/images/{id}/{title}")
     public String showImage(@PathVariable("title") String title, Model model,@PathVariable("id") Integer id) {
 
-        System.out.println("inside");
         Image image = imageService.getImage(id);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
@@ -98,9 +97,6 @@ public class ImageController {
     public String editImage(@RequestParam("imageId") Integer imageId, Model model,HttpSession session) {
         Image image = imageService.getImage(imageId);
         User user = (User) session.getAttribute("loggeduser");
-
-        System.out.println(user.getUsername()+"= session user");
-        System.out.println(image.getUser().getUsername()+"= image user");
 
 
         if(user.getUsername().equals(image.getUser().getUsername())) {
@@ -164,10 +160,7 @@ public class ImageController {
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId ,Model model,HttpSession session) {
         Image image = imageService.getImage(imageId);
         User user = (User) session.getAttribute("loggeduser");
-
-        System.out.println(user.getUsername()+"= session user");
-        System.out.println(image.getUser().getUsername()+"= image user");
-
+        
 
         if(user.getUsername().equals(image.getUser().getUsername())) {
             imageService.deleteImage(imageId);
