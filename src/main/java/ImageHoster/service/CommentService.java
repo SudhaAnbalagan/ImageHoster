@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CommentService
-{
+public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
@@ -20,8 +19,8 @@ public class CommentService
         return commentRepository.createcomment(Comment);
     }
 
-    public List<Comment> getAllComments(Integer imageId ,String imageTitle) {
-        return commentRepository.getAllComments(imageId,imageTitle);
+    public List<Comment> getAllComments(Integer imageId, String imageTitle) {
+        return commentRepository.getAllComments(imageId, imageTitle);
     }
 
 }

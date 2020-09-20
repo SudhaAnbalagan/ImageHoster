@@ -6,7 +6,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name="comments")
+@Table(name = "comments")
 public class Comment {
 
 

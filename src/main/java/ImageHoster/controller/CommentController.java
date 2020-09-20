@@ -31,13 +31,13 @@ public class CommentController {
     private ImageService imageService;
 
     /**
-     * 	This controller method is called when the request pattern is of type 'addComment' and also the incoming request is of POST Type
-     * 	The method calls the createComment() method in the business logic passing the comments, image id, image title to be add comment
-     * 	Looks for a controller method with mapping of type '/image/{imageId}/{imageTitle}'
-     * */
+     * This controller method is called when the request pattern is of type 'addComment' and also the incoming request is of POST Type
+     * The method calls the createComment() method in the business logic passing the comments, image id, image title to be add comment
+     * Looks for a controller method with mapping of type '/image/{imageId}/{imageTitle}'
+     */
     @RequestMapping(value = "/image/{imageId}/{imageTitle}/comments", method = RequestMethod.POST)
     public String addComment(@RequestParam("comment") String commentText, @PathVariable("imageId") Integer imageId,
-                             @PathVariable("imageTitle") String imageTitle, Model model, HttpSession session){
+                             @PathVariable("imageTitle") String imageTitle, Model model, HttpSession session) {
 
         Image image = imageService.getImage(imageId);
         String tags = convertTagsToString(image.getTags());
@@ -56,11 +56,13 @@ public class CommentController {
         return "redirect:/images/" + image.getId() + "/" + image.getTitle();
     }
 
-    /**The method receives the list of all tags
-     Converts the list of all tags to a single string containing all the tags separated by a comma and Returns the string*/
+    /**
+     * The method receives the list of all tags
+     * Converts the list of all tags to a single string containing all the tags separated by a comma and Returns the string
+     */
     private String convertTagsToString(List<Tag> tags) {
         StringBuilder tagString = new StringBuilder();
-        if( tags.size() > 0) {
+        if (tags.size() > 0) {
             for (int i = 0; i <= tags.size() - 2; i++) {
                 tagString.append(tags.get(i).getName()).append(",");
             }
@@ -68,13 +70,12 @@ public class CommentController {
             Tag lastTag = tags.get(tags.size() - 1);
             tagString.append(lastTag.getName());
             return tagString.toString();
-        }else {
+        } else {
             return "";
         }
 
 
     }
-
 
 
 }

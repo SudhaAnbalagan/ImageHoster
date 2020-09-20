@@ -52,7 +52,7 @@ public class ImageController {
     //Here a list of tags is added in the Model type object
     //this list is then sent to 'images/image.html' file and the tags are displayed
     @RequestMapping("/images/{id}/{title}")
-    public String showImage(@PathVariable("title") String title, Model model,@PathVariable("id") Integer id) {
+    public String showImage(@PathVariable("title") String title, Model model, @PathVariable("id") Integer id) {
 
         Image image = imageService.getImage(id);
         model.addAttribute("image", image);
@@ -102,26 +102,22 @@ public class ImageController {
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model,HttpSession session) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
         User user = (User) session.getAttribute("loggeduser");
 
 
-        if(user.getUsername().equals(image.getUser().getUsername())) {
+        if (user.getUsername().equals(image.getUser().getUsername())) {
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("image", image);
             model.addAttribute("tags", tags);
             return "images/edit";
-        }
-        else {
-            String error ="Only the owner of the image can edit the image";
-            String tags = convertTagsToString(image.getTags());
+        } else {
+            String error = "Only the owner of the image can edit the image";
             model.addAttribute("image", image);
-            model.addAttribute("tags", tags);
-            List<Comment> commentList = commentService.getAllComments(image.getId(), image.getTitle());
-            model.addAttribute("comments", commentList);
-
-            model.addAttribute("editError",error);
+            model.addAttribute("editError", error);
+            List<Comment> comment = commentService.getAllComments(image.getId(), image.getTitle());
+            model.addAttribute("comments", comment);
             return "images/image";
 
         }
@@ -167,25 +163,20 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId ,Model model,HttpSession session) {
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
         User user = (User) session.getAttribute("loggeduser");
 
 
-        if(user.getUsername().equals(image.getUser().getUsername())) {
+        if (user.getUsername().equals(image.getUser().getUsername())) {
             imageService.deleteImage(imageId);
             return "redirect:/images";
-        }
-        else {
-            String error ="Only the owner of the image can edit the image";
-            String tags = convertTagsToString(image.getTags());
+        } else {
+            String error = "Only the owner of the image can delete the image";
             model.addAttribute("image", image);
-            model.addAttribute("tags", tags);
-
-            List<Comment> commentList = commentService.getAllComments(image.getId(), image.getTitle());
-            model.addAttribute("comments", commentList);
-
-            model.addAttribute("deleteError",error);
+            model.addAttribute("deleteError", error);
+            List<Comment> comment = commentService.getAllComments(image.getId(), image.getTitle());
+            model.addAttribute("comments", comment);
             return "images/image";
 
         }

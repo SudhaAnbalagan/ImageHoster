@@ -29,16 +29,15 @@ public class CommentRepository {
         return comment;
     }
 
-    public List<Comment> getAllComments(Integer imageId , String imageTitle) {
+    public List<Comment> getAllComments(Integer imageId, String imageTitle) {
         EntityManager em = emf.createEntityManager();
 
         try {
-            TypedQuery<Comment> query = em.createQuery("SELECT c from Comment c where c.image.id=:imageid", Comment.class).setParameter("imageid",imageId);
+            TypedQuery<Comment> query = em.createQuery("SELECT c from Comment c where c.image.id=:imageid", Comment.class).setParameter("imageid", imageId);
             List<Comment> resultList = query.getResultList();
             return resultList;
-        }
-        catch (NoResultException nre){
-            return null ;
+        } catch (NoResultException nre) {
+            return null;
         }
     }
 
